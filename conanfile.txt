@@ -1,0 +1,10 @@
+[requires]
+boost/1.75.0
+
+[options]
+boost:without_locale=True
+boost:without_log=True
+boost:without_stacktrace=True
+
+[generators]
+cmake
