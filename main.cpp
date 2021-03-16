@@ -4,13 +4,12 @@
 #include <experimental/coroutine>
 #include <iostream>
 
-template <typename... Args>
-struct std::experimental::coroutine_traits<void, Args...> {
+struct result {
     struct promise_type {
-        void get_return_object() {}
+        void return_void() {}
         std::experimental::suspend_never initial_suspend() noexcept { return {}; }
         std::experimental::suspend_never final_suspend() noexcept { return {}; }
-        void return_void() {}
+        result get_return_object() { return {}; }
         void unhandled_exception() { std::terminate(); }
     };
 };
@@ -27,7 +26,7 @@ auto yield(boost::asio::any_io_executor executor) {
     return awaitable{std::move(executor)};
 }
 
-void coro(boost::asio::any_io_executor executor) {
+result coro(boost::asio::any_io_executor executor) {
     std::cout << "Before yield" << std::endl;
     co_await yield(executor);
     std::cout << "After yield" << std::endl;
