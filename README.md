@@ -62,8 +62,10 @@ CXX=/usr/local/opt/ccache/libexec/clang++
 mkdir build
 cd build
 conan install . --build missing
-cmake ..
-cmake
+# передаем в cmake точно такой же набор параметров сборки как в профиле conan
+# то, что мы указали его conan - помогает при сборке conan пакетов, но никак не влияет на cmake
+cmake .. -DCMAKE_CXX_COMPILER=/usr/local/opt/ccache/libexec/clang++ -DCMAKE_CXX_FLAGS="-fcoroutines-ts -fsanitize=address -fprofile-instr-generate -fcoverage-mapping -fno-omit-frame-pointer -stdlib=libc++"
+make
 bin/cpp_test
 ```
 
@@ -76,14 +78,6 @@ After yield
 ```
 
 ### Что может пойти не так
-cmake, как и conan, может найти неправильный компилятор.
-Тут может помочь явное указание пути и для cmake
-(то, что мы указали его conan - помогает при сборке conan пакетов, но никак не влияет на cmake).
-Делается это следующим образом:
-```shell
-cmake .. -DCMAKE_CXX_COMPILER=/usr/local/opt/ccache/libexec/clang++
-```
-
 если возникают ошибки с conan - для начала убедитесь, что у вас свежая версия.
 На момент написания этой инструкции мой conan имел версию 1.33.1
 
